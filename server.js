@@ -20,7 +20,10 @@ var bodyPaser=require('body-parser');
 var http = require('http');
 var mongojs=require('mongojs');
 var collections=['register'];
-var gpio = require('rpi-gpio');
+var rpigpio = require('rpi-gpio');
+var pigpio = require('pi-gpio');
+var gpio = require('gpio');
+var pinrequired = 7;
 
 // python code execution starts here
 //this code takes time to execute. Try another if possible. name is python code 1
@@ -124,14 +127,21 @@ app.post('/glowbulbon', function(req, res)
 {
   console.log("glowbulb on is called");
   console.log(req.body);
-  gpio.setup(7, gpio.DIR_OUT, write);
+  rpigpio.setup(pinrequired, gpio.DIR_OUT, write);
  
 function write() {
-    gpio.write(7, true, function(err) {
+    rpigpio.write(pinrequired, true, function(err) {
         if (err) throw err;
         console.log('Written to pin');
     });
 }
+
+//var gpio4 = gpio.export(7, {
+    // direction: "out",
+     //ready: function(){
+   // gpio4.set();
+     //}
+    //});
 
 });
 app.post('/glowbulboff', function(req, res)
